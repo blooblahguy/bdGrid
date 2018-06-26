@@ -547,7 +547,7 @@ function grid.layout(self, unit)
 		end
 		
 		--if (dispel and (dispelClass[class][dispel] or debuffwhitelist[dispelName])) then
-		if (dispel) then
+		if (dispel and dispelColors[dispel]) then
 			self.Dispel:Show()
 			self.Dispel:SetBackdropBorderColor(unpack(dispelColors[dispel]))
 
