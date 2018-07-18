@@ -335,7 +335,7 @@ function grid.layout(self, unit)
 		if (unit == self.unit) then
 			local allow = false
 			for name, v in pairs(config.specialalerts) do
-				if (UnitBuff(self.unit, name) or UnitDebuff(self.unit, name)) then
+				if (AuraUtil.FindAuraByName(name, self.unit)) then
 					allow = true
 					break
 				end
