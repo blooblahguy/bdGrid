@@ -901,6 +901,8 @@ end);
 -- disable blizzard raid frames
 CompactRaidFrameManager:UnregisterAllEvents() 
 CompactRaidFrameManager:Hide() 
+CompactRaidFrameManager.Show = bdCore.noop
 CompactRaidFrameContainer:UnregisterAllEvents() 
-CompactRaidFrameContainer:Hide() 
+CompactRaidFrameContainer:Hide()
+CompactRaidFrameContainer.Show = bdCore.noop
 
