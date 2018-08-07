@@ -332,11 +332,10 @@ function grid.layout(self, unit)
 	self.Glow:SetFrameLevel(3)
 	
 	self:RegisterEvent("UNIT_AURA", function(self, event, unit)
-		-- print(event, unit, self.unit)
-		if (unit == self.unit) then
+		if (UnitIsUnit(unit, self.unit)) then
 			local allow = false
 			for name, v in pairs(config.specialalerts) do
-				if (AuraUtil.FindAuraByName(name, self.unit, "HELPFUL|HARMFUL")) then
+				if (AuraUtil.FindAuraByName(name, self.unit) or AuraUtil.FindAuraByName(name, self.unit, "HARMFUL")) then
 					allow = true
 					break
 				end
