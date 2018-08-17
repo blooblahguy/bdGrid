@@ -58,9 +58,9 @@ function grid:frameSize(frame)
 	end
 
 	if (config.showGroupNumbers and IsInRaid()) then
-		self.Group:Show()
+		frame.Group:Show()
 	else
-		self.Group:Hide()
+		frame.Group:Hide()
 	end
 
 	frame.Range = {
