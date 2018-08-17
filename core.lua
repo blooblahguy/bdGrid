@@ -234,7 +234,7 @@ function grid.layout(self, unit)
 		if (bdCore.config.persistent.GridAliases[name]) then
 			name = bdCore.config.persistent.GridAliases[name];
 		end
-		return utf8sub(name, 1, config.namewidth)
+		return bdCore:utf8sub(name, 1, config.namewidth)
 	end
 
 	self:Tag(self.Short, '[self.Short]')
