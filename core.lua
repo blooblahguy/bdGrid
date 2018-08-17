@@ -369,7 +369,7 @@ function grid.layout(self, unit)
 		if (config.showspecialicons and config.specialalerts[name]) then
 			return config.specialalerts[name]
 		end
-		return bdCore:filterAura(name,caster)
+		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
 		button:SetAlpha(0.8)
@@ -449,11 +449,11 @@ function grid.layout(self, unit)
 	self.Debuffs['growth-y'] = "DOWN"
 	self.Debuffs['growth-x'] = "RIGHT"
 
-	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
+	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3)
 		if (config.showspecialicons and config.specialalerts[name]) then
 			return config.specialalerts[name]
 		end
-		return bdCore:filterAura(name,caster)
+		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
 		button:SetAlpha(0.8)
