@@ -57,12 +57,10 @@ function grid:frameSize(frame)
 		frame.Power:Show()
 	end
 
-	if IsInRaid() then
-		if (config.showGroupNumbers) then
-			frame.Group:Show()
-		else
-			frame.Group:Hide()
-		end
+	if (config.showGroupNumbers and IsInRaid()) then
+		self.Group:Show()
+	else
+		self.Group:Hide()
 	end
 
 	frame.Range = {
@@ -236,7 +234,7 @@ function grid.layout(self, unit)
 		if (bdCore.config.persistent.GridAliases[name]) then
 			name = bdCore.config.persistent.GridAliases[name];
 		end
-		return string.sub(name, 1, config.namewidth)
+		return utf8sub(name, 1, config.namewidth)
 	end
 
 	self:Tag(self.Short, '[self.Short]')
@@ -261,12 +259,10 @@ function grid.layout(self, unit)
 	end
 	self:Tag(self.Group, '[self.Group]')
 
-	if IsInRaid() then
-		if (config.showGroupNumbers) then
-			self.Group:Show()
-		else
-			self.Group:Hide()
-		end
+	if (config.showGroupNumbers and IsInRaid()) then
+		self.Group:Show()
+	else
+		self.Group:Hide()
 	end
 
 
