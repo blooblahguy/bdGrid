@@ -403,7 +403,7 @@ function grid.layout(self, unit)
 		['Curse'] = {.80, .33, .95, 1},
 	}
 
-	local _, class = UnitClass("player")
+	local classLocal, class = UnitClass("player")
 	local dispellist = dispelClass[class] or {}
 	
 	self.Dispel:RegisterEvent("UNIT_AURA")
@@ -414,11 +414,8 @@ function grid.layout(self, unit)
 		
 		for i = 1, 20 do
 			if (not dispel) then
-				dispel = select(5, UnitDebuff(unitid, i));
+				dispel = select(4, UnitDebuff(unitid, i));
 				dispelName = select(1, UnitDebuff(unitid, i));
-				if (bdCore.isBFA) then
-					dispel = select(4, UnitDebuff(unitid, i));
-				end
 			end
 		end
 		
