@@ -50,6 +50,12 @@ defaults[#defaults+1] = {showpartyleadericon = {
 	label = "Show Party Leader Indicator",
 	callback = function() grid:refresh() end
 }}
+defaults[#defaults+1] = {showGroupNumbers = {
+	type = "checkbox",
+	value = false,
+	label = "Show group numbers in raid",
+	callback = function() grid:refresh() end
+}}
 defaults[#defaults+1] = {invert = {
 	type = "checkbox",
 	value = false,
