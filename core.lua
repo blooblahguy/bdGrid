@@ -1,5 +1,6 @@
 local oUF = bdCore.oUF
-local grid = CreateFrame("frame", nil, UIParent)
+bdCore.Grid = CreateFrame("frame", nil, UIParent)
+local grid = bdCore.Grid
 local lib_glow = bdButtonGlow
 
 -- upcoming features

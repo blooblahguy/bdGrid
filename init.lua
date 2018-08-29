@@ -1,4 +1,5 @@
 local addonName, core = ...
+local grid = bdCore.Grid
 
 --------------------------------------
 -- Configuration Main
@@ -83,8 +84,8 @@ defaults[#defaults+1] = {inrangealpha = {
 defaults[#defaults+1] = {outofrangealpha = {
 	type = "slider",
 	value = 0.4,
-	min = 0,
-	max = 1,
+	min = 0.0,
+	max = 1.0,
 	step = 0.1,
 	label = "Out of Range Alpha",
 	tooltip = "The transparency of a player who's out of range",
