@@ -172,7 +172,7 @@ defaults[#defaults+1] = {namewidth = {
 	type = "slider",
 	value = 4,
 	min = 0,
-	max = 8,
+	max = 12,
 	step = 1,
 	label = "Truncate names to: ",
 	tooltip = "Longer names will be trucated to this size",
