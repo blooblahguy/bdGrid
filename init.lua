@@ -6,9 +6,12 @@ local grid = bdCore.Grid
 --------------------------------------
 local defaults = {}
 
+---------------------------------
+-- Frames Display
+---------------------------------
 defaults[#defaults+1] = {tab = {
 	type = "tab",
-	value = "Sizing & Display"
+	value = "Frames Display"
 }}
 defaults[#defaults+1] = {powerdisplay = {
 	type = "dropdown",
@@ -26,7 +29,7 @@ defaults[#defaults+1] = {width = {
 	step = 2,
 	label = "Width",
 	tooltip = "The width of each player in the raid frames",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 defaults[#defaults+1] = {height = {
 	type = "slider",
@@ -36,40 +39,40 @@ defaults[#defaults+1] = {height = {
 	step = 2,
 	label = "Height",
 	tooltip = "The height of each player in the raid frames",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 defaults[#defaults+1] = {hidetooltips = {
 	type = "checkbox",
 	value = true,
 	label = "Hide Tooltips",
 	tooltip = "Hide tooltips when mousing over each unit",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {showpartyleadericon = {
 	type = "checkbox",
 	value = true,
 	label = "Show Party Leader Indicator",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {showGroupNumbers = {
 	type = "checkbox",
 	value = false,
 	label = "Show group numbers in raid",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {invert = {
 	type = "checkbox",
 	value = false,
 	label = "Invert Frame Colors",
 	tooltip = "Make the main color of the frames a dark grey, and the backgrounds the class color.",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {roleicon = {
 	type = "checkbox",
 	value = false,
 	label = "Show role icon for tanks and healers",
 	tooltip = "Will only show icon for tanks/healers (only in groups)",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 defaults[#defaults+1] = {inrangealpha = {
 	type = "slider",
@@ -79,7 +82,7 @@ defaults[#defaults+1] = {inrangealpha = {
 	step = 0.1,
 	label = "In Range Alpha",
 	tooltip = "The transparency of a player who's in range",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 defaults[#defaults+1] = {outofrangealpha = {
 	type = "slider",
@@ -89,9 +92,52 @@ defaults[#defaults+1] = {outofrangealpha = {
 	step = 0.1,
 	label = "Out of Range Alpha",
 	tooltip = "The transparency of a player who's out of range",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 
+---------------------------------
+-- Aura Display
+---------------------------------
+defaults[#defaults+1] = {tab = {
+	type = "tab",
+	value = "Aura Display"
+}}
+defaults[#defaults+1] = {buffSize = {
+	type = "slider",
+	value = 14,
+	min = 8,
+	max = 40,
+	step = 2,
+	label = "Buff Size",
+	tooltip = "Size of each buff icon.",
+	callback = function() bdCore.Grid:callback() end
+}}
+defaults[#defaults+1] = {debuffSize = {
+	type = "slider",
+	value = 16,
+	min = 8,
+	max = 40,
+	step = 2,
+	label = "Debuff Size",
+	tooltip = "Size of each debuff icon.",
+	callback = function() bdCore.Grid:callback() end
+}}
+defaults[#defaults+1] = {showBuffTimers = {
+	type = "checkbox",
+	value = false,
+	label = "Show buff cooldown timers",
+	callback = function() bdCore.Grid:callback() end
+}}
+defaults[#defaults+1] = {showDebuffTimers = {
+	type = "checkbox",
+	value = false,
+	label = "Show debuff cooldown timers",
+	callback = function() bdCore.Grid:callback() end
+}}
+
+---------------------------------
+-- Growth & Grouping
+---------------------------------
 defaults[#defaults+1] = {tab = {
 	type = "tab",
 	value = "Growth & Grouping"
@@ -100,7 +146,7 @@ defaults[#defaults+1] = {showsolo = {
 	type = "checkbox",
 	value = true,
 	label = "Show raid frames when solo",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {num_groups = {
 	type = "slider",
@@ -110,29 +156,29 @@ defaults[#defaults+1] = {num_groups = {
 	step = 1,
 	label = "Default number of Groups",
 	tooltip = "How many groups should be shown at a time",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {intel_groups = {
 	type = "checkbox",
 	value = true,
 	label = "Automatically set group size.",
 	tooltip = "When in LFR, show 5 groups, mythic show 4, etc.",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {group_growth = {
 	type = "dropdown",
 	value = "Left",
 	options = {"Left","Right","Upwards","Downwards"},
-	label = "New group growth direction",
-	tooltip = "Growth direction for when a new group is added.",
-	callback = function() grid:refresh() end
+	label = "Group stack direction",
+	tooltip = "Group stacking direction for when a new group is added.",
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {new_player_reverse = {
 	type = "checkbox",
 	value = false,
 	label = "Reverse new player growth.",
 	tooltip = "When a new player is added the default growth direction is Downward or Right depending on your group growth.",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 defaults[#defaults+1] = {group_sort = {
 	type = "dropdown",
@@ -140,7 +186,7 @@ defaults[#defaults+1] = {group_sort = {
 	options = {"Group","Role","Class","Name"},
 	label = "Group By",
 	tooltip = "Method by which the groups should be formed.",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 
 defaults[#defaults+1] = {tab = {
@@ -155,7 +201,7 @@ defaults[#defaults+1] = {showspecialicons = {
 	type = "checkbox",
 	value = true,
 	label = "Show Special Spell icons by default",
-	callback = function() grid:refresh() end
+	callback = function() bdCore.Grid:refresh() end
 }}
 
 defaults[#defaults+1] = {specialalerts = {
@@ -176,7 +222,7 @@ defaults[#defaults+1] = {namewidth = {
 	step = 1,
 	label = "Truncate names to: ",
 	tooltip = "Longer names will be trucated to this size",
-	callback = function() grid:callback() end
+	callback = function() bdCore.Grid:callback() end
 }}
 defaults[#defaults+1] = {text = {
 	type = "text",

@@ -49,6 +49,9 @@ function grid:frameSize(frame)
 	frame.Debuffs:SetPoint("CENTER", frame.Health, "CENTER")
 	frame.Debuffs:SetFrameLevel(27)
 	frame.Debuffs:SetSize(44, 22)
+
+	frame.Buffs.size = config.buffSize
+	frame.Debuffs.size = config.debuffSize
 	
 	if (config.powerdisplay == "None") then
 		frame.Power:Hide()
@@ -243,7 +246,7 @@ function grid.layout(self, unit)
 
 	self.Group = self.Health:CreateFontString(nil)
 	self.Group:SetFont(bdCore.media.font, 12, "OUTLINE")
-	self.Group:SetPoint('CENTER', self, "BOTTOMLEFT", 40, 8)
+	self.Group:SetPoint('TOPRIGHT', self, "TOPRIGHT", -2, -2)
 	oUF.Tags.Events["self.Group"] = "UNIT_NAME_UPDATE"
 	oUF.Tags.Methods["self.Group"] = function(unit)
 		local name, server = UnitName(unit)
@@ -355,7 +358,7 @@ function grid.layout(self, unit)
 	
 	self.Buffs:EnableMouse(false)
 	self.Buffs.initialAnchor  = "TOPLEFT"
-	self.Buffs.size = 14
+	self.Buffs.size = config.buffSize
 	self.Buffs.spacing = 1
 	self.Buffs.num = 4
 	self.Buffs.onlyShowPlayer = true
@@ -369,9 +372,19 @@ function grid.layout(self, unit)
 		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
+		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		button:EnableMouse(false)
-		button.cd:GetRegions():SetAlpha(0)
+		if (config.showBuffTimers) then
+			region:SetAlpha(1)
+			region:SetTextHeight(config.buffSize)
+			region:SetJustifyH("CENTER")
+			region:SetJustifyV("MIDDLE")
+			region:SetAllPoints()
+		else
+			region:SetAlpha(0)
+		end
+
 		button.cd:SetReverse(true)
 		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	end
@@ -438,7 +451,7 @@ function grid.layout(self, unit)
 	self.Debuffs.initialAnchor  = "CENTER"
 	self.Debuffs.size = 16
 	self.Debuffs.spacing = 1
-	self.Debuffs.num = 3
+	self.Debuffs.num = 4
 	self.Debuffs.onlyShowPlayer = true
 	self.Debuffs['growth-y'] = "DOWN"
 	self.Debuffs['growth-x'] = "RIGHT"
@@ -450,9 +463,18 @@ function grid.layout(self, unit)
 		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
+		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		button:EnableMouse(false)
-		button.cd:GetRegions():SetAlpha(0)
+		if (config.showDebuffTimers) then
+			region:SetAlpha(1)
+			region:SetTextHeight(config.buffSize)
+			region:SetJustifyH("CENTER")
+			region:SetJustifyV("MIDDLE")
+			region:SetAllPoints()
+		else
+			region:SetAlpha(0)
+		end
 		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	end
 
