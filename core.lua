@@ -380,7 +380,8 @@ function grid.layout(self, unit)
 			region:SetTextHeight(config.buffSize)
 			region:SetJustifyH("CENTER")
 			region:SetJustifyV("MIDDLE")
-			region:SetAllPoints()
+			region:SetPoint("TOPLEFT", button.cd, "TOPLEFT", -config.buffSize, 0)
+			region:SetPoint("BOTTOMRIGHT", button.cd, "BOTTOMRIGHT", config.buffSize, 0)
 		else
 			region:SetAlpha(0)
 		end
@@ -449,7 +450,7 @@ function grid.layout(self, unit)
 	self.Debuffs:SetPoint("CENTER", self.Health, "CENTER")
 	
 	self.Debuffs.initialAnchor  = "CENTER"
-	self.Debuffs.size = 16
+	self.Debuffs.size = config.debuffSize
 	self.Debuffs.spacing = 1
 	self.Debuffs.num = 4
 	self.Debuffs.onlyShowPlayer = true
@@ -468,10 +469,11 @@ function grid.layout(self, unit)
 		button:EnableMouse(false)
 		if (config.showDebuffTimers) then
 			region:SetAlpha(1)
-			region:SetTextHeight(config.buffSize)
+			region:SetTextHeight(config.debuffSize)
 			region:SetJustifyH("CENTER")
 			region:SetJustifyV("MIDDLE")
-			region:SetAllPoints()
+			region:SetPoint("TOPLEFT", button.cd, "TOPLEFT", -config.debuffSize, 0)
+			region:SetPoint("BOTTOMRIGHT", button.cd, "BOTTOMRIGHT", config.debuffSize, 0)
 		else
 			region:SetAlpha(0)
 		end
