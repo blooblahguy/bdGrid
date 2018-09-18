@@ -375,8 +375,9 @@ function grid.layout(self, unit)
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		button:EnableMouse(false)
+		region:SetAlpha(1)
+		region:Show(1)
 		if (config.showBuffTimers) then
-			region:SetAlpha(1)
 			region:SetTextHeight(config.buffSize)
 			region:SetJustifyH("CENTER")
 			region:SetJustifyV("MIDDLE")
@@ -384,6 +385,7 @@ function grid.layout(self, unit)
 			region:SetPoint("BOTTOMRIGHT", button.cd, "BOTTOMRIGHT", config.buffSize, 0)
 		else
 			region:SetAlpha(0)
+			region:Hide()
 		end
 
 		button.cd:SetReverse(true)
