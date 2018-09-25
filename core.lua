@@ -21,6 +21,9 @@ specialspells['Chilled Blood'] = true
 
 
 local config = bdCore.config.profile['Grid']
+local auras_config = bdCore.config.persistent['Auras']
+
+
 
 if (not bdCore.config.persistent.GridAliases) then
 	bdCore.config.persistent.GridAliases = {}
@@ -77,6 +80,73 @@ function grid:frameSize(frame)
 	end
 
 	bdCore:triggerEvent("bd_updateTags")
+end
+
+local dispelClass = {
+	["PRIEST"] = { ["Disease"] = true, ["Magic"] = true, }, --Purify
+	["SHAMAN"] = { ["Curse"] = true, ["Magic"] = true, }, --Purify Spirit
+	["PALADIN"] = { ["Poison"] = true, ["Disease"] = true, ["Magic"] = true, }, --Cleanse
+	["MAGE"] = { ["Curse"] = true, }, --Remove Curse
+	["DRUID"] = { ["Curse"] = true, ["Poison"] = true, ["Magic"] = true, }, --Nature's Cure
+	["MONK"] = { ["Poison"] = true, ["Disease"] = true, ["Magic"] = true, }, --Detox
+}
+local dispelColors = {
+	['Magic'] = {.16, .5, .81, 1},
+	['Poison'] = {.12, .76, .36, 1},
+	['Disease'] = {.76, .46, .12, 1},
+	['Curse'] = {.80, .33, .95, 1},
+}
+
+--===========================================
+-- DISPEL / GLOWING
+--===========================================
+local function dispelAndGlow(self, event, unit)
+	if (unit ~= self.unit) then return end
+
+	local foundGlow = false
+	local foundDispel = false
+	local noMoreDebuffs = false -- let's us exit loop early if we run out of one or both aura types
+	local noMoreBuffs = false -- let's us exit loop early if we run out of one or both aura types
+
+	for i = 1, 40 do
+		local debuff, icon, count, debuffType = UnitDebuff(unit, i)
+		noMoreDebuffs = debuff and false or true
+
+		-- dispel
+		if (debuff and dispelColors[debuffType]) then
+			foundDispel = debuffType
+			noMoreDebuffs = true
+		end
+
+		-- glow
+		if (not foundGlow) then
+			local buff = UnitBuff(unit, i)
+			noMoreBuffs = buff and false or true
+
+			if (config.specialalerts[debuff] or config.specialalerts[buff]) then
+				foundGlow = true
+				noMoreBuffs = true
+			end
+		end
+		
+		-- breka if possible
+		if ((foundGlow and foundDispel) or (noMoreBuffs and noMoreDebuffs)) then
+			break
+		end
+	end
+
+	if (foundDispel) then
+		self.Dispel:Show()
+		self.Dispel:SetBackdropBorderColor(unpack(dispelColors[foundDispel]))
+	else
+		self.Dispel:Hide()
+	end
+
+	if (foundGlow) then
+		lib_glow.ShowOverlayGlow(self.Glow)
+	else
+		lib_glow.HideOverlayGlow(self.Glow)
+	end
 end
 
 -- Load 
@@ -163,43 +233,6 @@ function grid.layout(self, unit)
 	self.HealPredict:SetAllPoints(self.Health)
 	self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
 	self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
-
-	-- special spell alerts
-	self.Glow = CreateFrame("frame", "glow", self.Health)
-	self.Glow:SetAllPoints()
-	self.Glow:SetSize(config.width, config.height)
-	self.Glow:SetFrameLevel(3)
-	
-	self:RegisterEvent("UNIT_AURA", function(self, event, unit)
-		if (UnitIsUnit(unit, self.unit)) then
-			local allow = false
-			for name, v in pairs(config.specialalerts) do
-				if (AuraUtil.FindAuraByName(name, self.unit) or AuraUtil.FindAuraByName(name, self.unit, "HARMFUL")) then
-					allow = true
-					break
-				end
-			end
-
-			if (allow) then
-				lib_glow.ShowOverlayGlow(self.Glow)
-			else
-				lib_glow.HideOverlayGlow(self.Glow)
-			end
-		end
-	end)
-	--[[self:SetScript("OnEvent", function(self, event, unit)
-		
-	end)--]]
-
-	-- glow indicator
-	--[[self.Glow = CreateFrame("frame", "bdGrid_Glow"..unit, self.Health, "AutoCastShineTemplate")
-	
-	--self.Health:CreateTexture(nil,"OVERLAY")
-	--self.Glow:SetTexture("Interface\\ItemSocketingFrame\\UI-ItemSockets.png")
-	--self.Glow:SetTexture(TEXTURE)
-	self.Glow:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 2, -2)
-	self.Glow:SetPoint("BOTTOMRIGHT", self.Health, "BOTTOMRIGHT", -2, 2)
-	AutoCastShine_AutoCastStart(self.Glow);--]]
 	
 
 	-- Resurrect
@@ -214,7 +247,6 @@ function grid.layout(self, unit)
 	self.Power:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMLEFT", 0, 0)
 	self.Power:SetPoint("TOPRIGHT", self.Health, "BOTTOMRIGHT",0,2)
 	self.Power:SetAlpha(0.8)
-	self.Power.frequentUpdates = true
 	self.Power.colorPower = true
 	self.Power.border = self.Health:CreateTexture(nil)
 	self.Power.border:SetPoint("TOPRIGHT", self.Power, "TOPRIGHT", 0, 2)
@@ -276,10 +308,6 @@ function grid.layout(self, unit)
 	
 	-- Range
 	self:SetScript("OnEnter", function()
-		--[[self.arrowmouseover = true
-		if (not self.OoR) then
-			bdCore:arrow(self, self.unit)
-		end--]]
 		if (not config.hidetooltips) then
 			UnitFrame_OnEnter(self)
 		end
@@ -361,14 +389,11 @@ function grid.layout(self, unit)
 	self.Buffs.size = config.buffSize
 	self.Buffs.spacing = 1
 	self.Buffs.num = 4
-	self.Buffs.onlyShowPlayer = true
 	self.Buffs['growth-y'] = "DOWN"
 	self.Buffs['growth-x'] = "RIGHT"
 
 	self.Buffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
-		if (config.showspecialicons and config.specialalerts[name]) then
-			return config.specialalerts[name]
-		end
+
 		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
@@ -392,7 +417,12 @@ function grid.layout(self, unit)
 		button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	end
 	
-	-- Dispells
+	-- special spell alerts
+	self.Glow = CreateFrame("frame", "glow", self.Health)
+	self.Glow:SetAllPoints()
+	self.Glow:SetFrameLevel(3)
+
+	-- Dispels
 	self.Dispel = CreateFrame('frame', nil, self.Health)
 	self.Dispel:SetFrameLevel(100)
 	self.Dispel:SetPoint('TOPRIGHT', self, "TOPRIGHT", 1, 1)
@@ -401,70 +431,26 @@ function grid.layout(self, unit)
 	self.Dispel:SetBackdropBorderColor(1, 0, 0,1)
 	self.Dispel:SetBackdropColor(0,0,0,0)
 	self.Dispel:Hide()
-	local dispelClass = {
-		["PRIEST"] = { ["Disease"] = true, ["Magic"] = true, }, --Purify
-		["SHAMAN"] = { ["Curse"] = true, ["Magic"] = true, }, --Purify Spirit
-		["PALADIN"] = { ["Poison"] = true, ["Disease"] = true, ["Magic"] = true, }, --Cleanse
-		["MAGE"] = { ["Curse"] = true, }, --Remove Curse
-		["DRUID"] = { ["Curse"] = true, ["Poison"] = true, ["Magic"] = true, }, --Nature's Cure
-		["MONK"] = { ["Poison"] = true, ["Disease"] = true, ["Magic"] = true, }, --Detox
-	}
-	local dispelColors = {
-		['Magic'] = {.16, .5, .81, 1},
-		['Poison'] = {.12, .76, .36, 1},
-		['Disease'] = {.76, .46, .12, 1},
-		['Curse'] = {.80, .33, .95, 1},
-	}
-
-	local classLocal, class = UnitClass("player")
-	local dispellist = dispelClass[class] or {}
 	
-	self.Dispel:RegisterEvent("UNIT_AURA")
-	self.Dispel:SetScript("OnEvent", function(s, event, unitid)
-		if unitid ~= self.unit then return end
-		local dispel = nil
-		local dispelName = nil
-		
-		for i = 1, 20 do
-			if (not dispel) then
-				dispel = select(4, UnitDebuff(unitid, i));
-				dispelName = select(1, UnitDebuff(unitid, i));
-			end
-		end
-		
-		--if (dispel and (dispelClass[class][dispel] or debuffwhitelist[dispelName])) then
-		if (dispel and dispelColors[dispel]) then
-			self.Dispel:Show()
-			self.Dispel:SetBackdropBorderColor(unpack(dispelColors[dispel]))
-
-			if (not dispelColors[dispel]) then
-				self.Dispel:Hide()
-			end
-			
-		else
-			self.Dispel:Hide()
-		end
-	end)
+	-- look / color / show dispels and glows
+	self:RegisterEvent("UNIT_AURA", dispelAndGlow);
 	
 	-- Debuffs
 	self.Debuffs = CreateFrame("Frame", nil, self.Health)
 	self.Debuffs:SetFrameLevel(21)
 	self.Debuffs:SetPoint("CENTER", self.Health, "CENTER")
 	
-	self.Debuffs.initialAnchor  = "CENTER"
+	self.Debuffs.initialAnchor = "CENTER"
 	self.Debuffs.size = config.debuffSize
 	self.Debuffs.spacing = 1
 	self.Debuffs.num = 4
-	self.Debuffs.onlyShowPlayer = true
 	self.Debuffs['growth-y'] = "DOWN"
 	self.Debuffs['growth-x'] = "RIGHT"
 
 	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3)
-		if (config.showspecialicons and config.specialalerts[name]) then
-			return config.specialalerts[name]
-		end
 		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
 	end
+
 	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
