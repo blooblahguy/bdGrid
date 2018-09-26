@@ -219,20 +219,20 @@ function grid.layout(self, unit)
 	self:Tag(self.Status, '[status]')
 	
 	-- Absorb
-	self.TotalAbsorb = CreateFrame('StatusBar', nil, self.Health)
-	self.TotalAbsorb:SetAllPoints(self.Health)
-	self.TotalAbsorb:SetStatusBarTexture(bdCore.media.flat)
-	self.TotalAbsorb:SetStatusBarColor(.1,.1,.1,.6)
+	-- self.TotalAbsorb = CreateFrame('StatusBar', nil, self.Health)
+	-- self.TotalAbsorb:SetAllPoints(self.Health)
+	-- self.TotalAbsorb:SetStatusBarTexture(bdCore.media.flat)
+	-- self.TotalAbsorb:SetStatusBarColor(.1,.1,.1,.6)
 	
-	self.HealAbsorb = CreateFrame('StatusBar', nil, self.Health)
-	self.HealAbsorb:SetAllPoints(self.Health)
-	self.HealAbsorb:SetStatusBarTexture(bdCore.media.flat)
-	self.HealAbsorb:SetStatusBarColor(.2,0,0,.5)
+	-- self.HealAbsorb = CreateFrame('StatusBar', nil, self.Health)
+	-- self.HealAbsorb:SetAllPoints(self.Health)
+	-- self.HealAbsorb:SetStatusBarTexture(bdCore.media.flat)
+	-- self.HealAbsorb:SetStatusBarColor(.2,0,0,.5)
 	
-	self.HealPredict = CreateFrame('StatusBar', nil, self.Health)
-	self.HealPredict:SetAllPoints(self.Health)
-	self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
-	self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
+	-- self.HealPredict = CreateFrame('StatusBar', nil, self.Health)
+	-- self.HealPredict:SetAllPoints(self.Health)
+	-- self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
+	-- self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
 	
 
 	-- Resurrect
