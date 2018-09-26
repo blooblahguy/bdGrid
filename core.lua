@@ -781,12 +781,9 @@ addonDisabler:SetScript("OnEvent", function(self, event, addon)
 	if (IsAddOnLoaded("BlizzardRaidUI")) then
 		DisableAddOn("BlizzardRaidUI")
 	end
-	if (IsAddOnLoaded("Blizzard_Nameplates")) then
-		DisableAddOn("Blizzard_Nameplates")
-	end
-	if (IsAddOnLoaded("Blizzard_DeathRecap")) then
-		DisableAddOn("Blizzard_DeathRecap")
-	end
+	-- if (IsAddOnLoaded("Blizzard_DeathRecap")) then
+	-- 	DisableAddOn("Blizzard_DeathRecap")
+	-- end
 	if (IsAddOnLoaded("Blizzard_CompactUnitFrameProfiles")) then
 		DisableAddOn("Blizzard_CompactUnitFrameProfiles")
 	end
@@ -801,6 +798,5 @@ addonDisabler:SetScript("OnEvent", function(self, event, addon)
 		CompactRaidFrameContainer:Hide()
 		CompactRaidFrameContainer.Show = bdCore.noop
 		DisableAddOn("Blizzard_CompactRaidFrames")
-		DisableAddOn("Blizzard_CUFProfiles")
 	end
 end)
