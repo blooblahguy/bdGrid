@@ -777,7 +777,7 @@ end);
 local addonDisabler = CreateFrame("frame", nil)
 addonDisabler:RegisterEvent("ADDON_LOADED")
 addonDisabler:SetScript("OnEvent", function(self, event, addon)
-	print(addon)
+	-- print(addon)
 	if (IsAddOnLoaded("BlizzardRaidUI")) then
 		DisableAddOn("BlizzardRaidUI")
 	end
