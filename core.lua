@@ -263,7 +263,7 @@ function grid.layout(self, unit)
 	self.Short:SetPoint("BOTTOMRIGHT", self.nameAnchor, "BOTTOMRIGHT", 0,0)
 	self.Short:SetJustifyH("RIGHT")
 	
-	oUF.Tags.Events["self.Short"] = "UNIT_NAME_UPDATE BAG_CLOSED"
+	oUF.Tags.Events["self.Short"] = "UNIT_NAME_UPDATE"
 	oUF.Tags.Methods["self.Short"] = function(unit)
 		local name = UnitName(unit)
 		if (not name) then return end
