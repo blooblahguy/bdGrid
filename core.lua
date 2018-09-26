@@ -3,6 +3,8 @@ bdCore.Grid = CreateFrame("frame", nil, UIParent)
 local grid = bdCore.Grid
 local lib_glow = bdButtonGlow
 
+local InCombatLockdown, UnitDebuff, UnitBuff, UnitGroupRolesAssigned, UnitIsConnected, UnitIsDead, UnitIsGhost, UnitName, GetNumGroupMembers, GetRaidRosterInfo, UnitGroupRolesAssigned, GetInstanceInfo, UnitInRaid, UnitInParty, UnitIsUnit = InCombatLockdown, UnitDebuff, UnitBuff, UnitGroupRolesAssigned, UnitIsConnected, UnitIsDead, UnitIsGhost, UnitName, GetNumGroupMembers, GetRaidRosterInfo, UnitGroupRolesAssigned, GetInstanceInfo, UnitInRaid, UnitInParty, UnitIsUnit
+
 -- upcoming features
 -- fully custom sorting, custom player positions
 -- bouqets / positioning
@@ -23,8 +25,6 @@ specialspells['Chilled Blood'] = true
 local config = bdCore.config.profile['Grid']
 local auras_config = bdCore.config.persistent['Auras']
 
-
-
 if (not bdCore.config.persistent.GridAliases) then
 	bdCore.config.persistent.GridAliases = {}
 end
@@ -33,7 +33,8 @@ end
 function grid:frameSize(frame)
 	if (InCombatLockdown()) then return end
 
-	config = bdCore.config.profile['Grid']
+	DisableAddOn("Blizzard_CompactRaidFrames")
+	DisableAddOn("Blizzard_CUFProfiles")
 
 	frame:SetSize(config.width, config.height)
 	--frame.Health:SetSize(config.width, config.height)
@@ -79,7 +80,6 @@ function grid:frameSize(frame)
 		frame.GroupRoleIndicator:Hide()
 	end
 
-	bdCore:triggerEvent("bd_updateTags")
 end
 
 local dispelClass = {
@@ -300,11 +300,6 @@ function grid.layout(self, unit)
 	else
 		self.Group:Hide()
 	end
-
-
-	bdCore:hookEvent("bd_updateTags", function()
-		self.Short:UpdateTag()
-	end)
 	
 	-- Range
 	self:SetScript("OnEnter", function()
@@ -711,8 +706,6 @@ local function aliasPrompt(playerName)
 				bdCore.config.persistent.GridAliases[playerName] = text
 			end
 			self:Hide()
-
-			bdCore:triggerEvent("bd_updateTags")
 		end,
 		OnHide = function (self) 
 			self.data = nil; 
@@ -781,10 +774,33 @@ hooksecurefunc("ToggleDropDownMenu", function(level, value, dropDownFrame, ancho
 end);
 
 -- disable blizzard raid frames
-CompactRaidFrameManager:UnregisterAllEvents() 
-CompactRaidFrameManager:Hide() 
-CompactRaidFrameManager.Show = bdCore.noop
-CompactRaidFrameContainer:UnregisterAllEvents() 
-CompactRaidFrameContainer:Hide()
-CompactRaidFrameContainer.Show = bdCore.noop
-
+local addonDisabler = CreateFrame("frame", nil)
+addonDisabler:RegisterEvent("ADDON_LOADED")
+addonDisabler:SetScript("OnEvent", function(self, event, addon)
+	print(addon)
+	if (IsAddOnLoaded("BlizzardRaidUI")) then
+		DisableAddOn("BlizzardRaidUI")
+	end
+	if (IsAddOnLoaded("Blizzard_Nameplates")) then
+		DisableAddOn("Blizzard_Nameplates")
+	end
+	if (IsAddOnLoaded("Blizzard_DeathRecap")) then
+		DisableAddOn("Blizzard_DeathRecap")
+	end
+	if (IsAddOnLoaded("Blizzard_CompactUnitFrameProfiles")) then
+		DisableAddOn("Blizzard_CompactUnitFrameProfiles")
+	end
+	if (IsAddOnLoaded("Blizzard_CUFProfiles")) then
+		DisableAddOn("Blizzard_CUFProfiles")
+	end
+	if (IsAddOnLoaded("Blizzard_CompactRaidFrames")) then
+		CompactRaidFrameManager:UnregisterAllEvents() 
+		CompactRaidFrameManager:Hide() 
+		CompactRaidFrameManager.Show = bdCore.noop
+		CompactRaidFrameContainer:UnregisterAllEvents() 
+		CompactRaidFrameContainer:Hide()
+		CompactRaidFrameContainer.Show = bdCore.noop
+		DisableAddOn("Blizzard_CompactRaidFrames")
+		DisableAddOn("Blizzard_CUFProfiles")
+	end
+end)
