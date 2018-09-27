@@ -219,20 +219,20 @@ function grid.layout(self, unit)
 	self:Tag(self.Status, '[status]')
 	
 	-- Absorb
-	-- self.TotalAbsorb = CreateFrame('StatusBar', nil, self.Health)
-	-- self.TotalAbsorb:SetAllPoints(self.Health)
-	-- self.TotalAbsorb:SetStatusBarTexture(bdCore.media.flat)
-	-- self.TotalAbsorb:SetStatusBarColor(.1,.1,.1,.6)
+	self.TotalAbsorb = CreateFrame('StatusBar', nil, self.Health)
+	self.TotalAbsorb:SetAllPoints(self.Health)
+	self.TotalAbsorb:SetStatusBarTexture(bdCore.media.flat)
+	self.TotalAbsorb:SetStatusBarColor(.1,.1,.1,.6)
 	
-	-- self.HealAbsorb = CreateFrame('StatusBar', nil, self.Health)
-	-- self.HealAbsorb:SetAllPoints(self.Health)
-	-- self.HealAbsorb:SetStatusBarTexture(bdCore.media.flat)
-	-- self.HealAbsorb:SetStatusBarColor(.2,0,0,.5)
+	self.HealAbsorb = CreateFrame('StatusBar', nil, self.Health)
+	self.HealAbsorb:SetAllPoints(self.Health)
+	self.HealAbsorb:SetStatusBarTexture(bdCore.media.flat)
+	self.HealAbsorb:SetStatusBarColor(.2,0,0,.5)
 	
-	-- self.HealPredict = CreateFrame('StatusBar', nil, self.Health)
-	-- self.HealPredict:SetAllPoints(self.Health)
-	-- self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
-	-- self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
+	self.HealPredict = CreateFrame('StatusBar', nil, self.Health)
+	self.HealPredict:SetAllPoints(self.Health)
+	self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
+	self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
 	
 
 	-- Resurrect
@@ -388,8 +388,10 @@ function grid.layout(self, unit)
 	self.Buffs['growth-x'] = "RIGHT"
 
 	self.Buffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
-
-		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
+		isBossDebuff = isBossDebuff or false
+		nameplateShowAll = nameplateShowAll or false
+		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
+		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
 	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
 		local region = button.cd:GetRegions()
@@ -443,7 +445,10 @@ function grid.layout(self, unit)
 	self.Debuffs['growth-x'] = "RIGHT"
 
 	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3)
-		return bdCore:filterAura(name, caster, isBossDebuff, nameplateShowAll, false)
+		isBossDebuff = isBossDebuff or false
+		nameplateShowAll = nameplateShowAll or false
+		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
+		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
 
 	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
