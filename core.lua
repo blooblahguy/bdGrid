@@ -109,26 +109,33 @@ local function dispelAndGlow(self, event, unit)
 	local noMoreBuffs = false -- let's us exit loop early if we run out of one or both aura types
 
 	for i = 1, 40 do
-		local buff
-		local debuff, icon, count, debuffType = UnitDebuff(unit, i)
-		if (not debuff) then
-			noMoreDebuffs = true
-		end
 
-		-- dispel
-		if (debuff and dispelColors[debuffType]) then
-			foundDispel = debuffType
-			noMoreDebuffs = true
+		if (not noMoreDebuffs) then
+			local debuff, icon, count, debuffType = UnitDebuff(unit, i)
+			if (not debuff) then
+				noMoreDebuffs = true
+			else
+				if (dispelColors[debuffType]) then
+					foundDispel = debuffType
+					noMoreDebuffs = true
+				end
+
+				if (config.specialalerts[debuff]) then
+					foundGlow = true
+					noMoreBuffs = true
+					noMoreDebuffs = true
+				end
+			end
 		end
 
 		-- glow
-		if (not foundGlow) then
-			buff = UnitBuff(unit, i)
+		if (not noMoreBuffs) then
+			local buff = UnitBuff(unit, i)
 			if (not buff) then
 				noMoreBuffs = true
 			end
 
-			if (config.specialalerts[debuff] or config.specialalerts[buff]) then
+			if (config.specialalerts[buff]) then
 				foundGlow = true
 				noMoreBuffs = true
 			end
