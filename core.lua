@@ -33,9 +33,6 @@ end
 function grid:frameSize(frame)
 	if (InCombatLockdown()) then return end
 
-	DisableAddOn("Blizzard_CompactRaidFrames")
-	DisableAddOn("Blizzard_CUFProfiles")
-
 	frame:SetSize(config.width, config.height)
 	--frame.Health:SetSize(config.width, config.height)
 	frame.RaidTargetIndicator:SetSize(12, 12)
