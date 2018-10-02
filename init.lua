@@ -21,6 +21,16 @@ defaults[#defaults+1] = {powerdisplay = {
 	tooltip = "Show mana/energy/rage bars on frames.",
 	callback = function() bdCore:triggerEvent("bdGrid_update") end
 }}
+defaults[#defaults+1] = {powerheight = {
+	type = "slider",
+	value = 2,
+	min = 2,
+	max = 20,
+	step = 1,
+	label = "Power Bar Height",
+	tooltip = "The height of mana/energy/rage",
+	callback = function() bdCore.Grid:callback() end
+}}
 defaults[#defaults+1] = {width = {
 	type = "slider",
 	value = 60,

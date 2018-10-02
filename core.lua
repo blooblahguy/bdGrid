@@ -65,6 +65,8 @@ function grid:frameSize(frame)
 		frame.Power:Show()
 	end
 
+	frame.Power:SetPoint("TOPRIGHT", frame.Health, "BOTTOMRIGHT",0, config.powerheight)
+
 	if (config.showGroupNumbers and IsInRaid()) then
 		frame.Group:Show()
 	else
@@ -257,7 +259,7 @@ function grid.layout(self, unit)
 	self.Power:SetStatusBarTexture(bdCore.media.flat)
 	self.Power:ClearAllPoints()
 	self.Power:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMLEFT", 0, 0)
-	self.Power:SetPoint("TOPRIGHT", self.Health, "BOTTOMRIGHT",0,2)
+	self.Power:SetPoint("TOPRIGHT", self.Health, "BOTTOMRIGHT",0, config.powerheight)
 	self.Power:SetAlpha(0.8)
 	self.Power.colorPower = true
 	self.Power.border = self.Health:CreateTexture(nil)
