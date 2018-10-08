@@ -794,18 +794,18 @@ local addonDisabler = CreateFrame("frame", nil)
 addonDisabler:RegisterEvent("ADDON_LOADED")
 addonDisabler:SetScript("OnEvent", function(self, event, addon)
 	-- print(addon)
-	if (IsAddOnLoaded("BlizzardRaidUI")) then
-		DisableAddOn("BlizzardRaidUI")
-	end
+	-- if (IsAddOnLoaded("BlizzardRaidUI")) then
+	-- 	DisableAddOn("BlizzardRaidUI")
+	-- end
 	-- if (IsAddOnLoaded("Blizzard_DeathRecap")) then
 	-- 	DisableAddOn("Blizzard_DeathRecap")
 	-- end
-	if (IsAddOnLoaded("Blizzard_CompactUnitFrameProfiles")) then
-		DisableAddOn("Blizzard_CompactUnitFrameProfiles")
-	end
-	if (IsAddOnLoaded("Blizzard_CUFProfiles")) then
-		DisableAddOn("Blizzard_CUFProfiles")
-	end
+	-- if (IsAddOnLoaded("Blizzard_CompactUnitFrameProfiles")) then
+	-- 	DisableAddOn("Blizzard_CompactUnitFrameProfiles")
+	-- end
+	-- if (IsAddOnLoaded("Blizzard_CUFProfiles")) then
+	-- 	DisableAddOn("Blizzard_CUFProfiles")
+	-- end
 	if (IsAddOnLoaded("Blizzard_CompactRaidFrames")) then
 		CompactRaidFrameManager:UnregisterAllEvents() 
 		CompactRaidFrameManager:Hide() 
@@ -813,6 +813,6 @@ addonDisabler:SetScript("OnEvent", function(self, event, addon)
 		CompactRaidFrameContainer:UnregisterAllEvents() 
 		CompactRaidFrameContainer:Hide()
 		CompactRaidFrameContainer.Show = bdCore.noop
-		DisableAddOn("Blizzard_CompactRaidFrames")
+		-- DisableAddOn("Blizzard_CompactRaidFrames")
 	end
 end)
