@@ -22,11 +22,11 @@ specialspells['Fulminating Pulse'] = true
 specialspells['Chilled Blood'] = true
 
 
-local config = bdCore.config.profile['Grid']
-local auras_config = bdCore.config.persistent['Auras']
+local config = bdConfigLib.profile['Grid']
+local auras_config = bdConfigLib.persistent['Auras']
 
-if (not bdCore.config.persistent.GridAliases) then
-	bdCore.config.persistent.GridAliases = {}
+if (not bdConfigLib.persistent.GridAliases) then
+	bdConfigLib.persistent.GridAliases = {}
 end
 
 -- make sizes outside of combat

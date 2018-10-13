@@ -240,8 +240,13 @@ defaults[#defaults+1] = {text = {
 }}
 
 -- if another bdAddon hasn't added auras to config, add them here
-if (not bdCore.modules["Auras"]) then
-	bdCore:addModule("Auras", bdCore.auraconfig, true)
-end
+-- if (not bdCore.modules["Auras"]) then
+-- 	bdCore:addModule("Auras", bdCore.auraconfig, true)
+-- end
 
-bdCore:addModule("Grid", defaults)
+print("config", BD_persistent)
+
+bdConfigLib:RegisterModule({
+	name = "Grid"
+}, defaults, BD_persistent)
+-- bdCore:addModule("Grid", defaults)
