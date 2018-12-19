@@ -22,11 +22,14 @@ specialspells['Fulminating Pulse'] = true
 specialspells['Chilled Blood'] = true
 
 
-local config = bdConfigLib.profile['Grid']
-local auras_config = bdConfigLib.persistent['Auras']
+local config = bdConfigLib:GetSave("Grid")
+local core_config = bdConfigLib:GetSave("bdAddons")
+-- local auras_config = bdConfigLib:GetSave("bdAddons")
+-- local config = bdConfigLib.profile['Grid']
+local auras_config = {} --bdConfigLib.persistent['Auras']
 
-if (not bdConfigLib.persistent.GridAliases) then
-	bdConfigLib.persistent.GridAliases = {}
+if (not core_config.GridAliases) then
+	core_config.GridAliases = {}
 end
 
 -- make sizes outside of combat
@@ -278,8 +281,8 @@ function grid.layout(self, unit)
 	oUF.Tags.Methods["self.Short"] = function(unit)
 		local name = UnitName(unit)
 		if (not name) then return end
-		if (bdCore.config.persistent.GridAliases[name]) then
-			name = bdCore.config.persistent.GridAliases[name];
+		if (core_config.GridAliases[name]) then
+			name = core_config.GridAliases[name];
 		end
 		return bdCore:utf8sub(name, 1, config.namewidth)
 	end

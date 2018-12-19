@@ -244,9 +244,9 @@ defaults[#defaults+1] = {text = {
 -- 	bdCore:addModule("Auras", bdCore.auraconfig, true)
 -- end
 
-print("config", BD_persistent)
+-- print("config", BD_persistent)
 
 bdConfigLib:RegisterModule({
 	name = "Grid"
-}, defaults, BD_persistent)
+}, defaults, "BD_persistent")
 -- bdCore:addModule("Grid", defaults)
