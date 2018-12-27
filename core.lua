@@ -24,9 +24,14 @@ specialspells['Chilled Blood'] = true
 
 local config = bdConfigLib:GetSave("Grid")
 local core_config = bdConfigLib:GetSave("bdAddons")
--- local auras_config = bdConfigLib:GetSave("bdAddons")
--- local config = bdConfigLib.profile['Grid']
-local auras_config = {} --bdConfigLib.persistent['Auras']
+
+local auras_config = bdConfigLib:GetSave('Auras')
+if (not aura_config) then
+	auras_config = bdConfigLib:RegisterModule({
+		name = "Auras"
+	}, bdCore.auraconfig, "BD_persistent")
+end
+
 
 if (not core_config.GridAliases) then
 	core_config.GridAliases = {}
