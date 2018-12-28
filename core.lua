@@ -12,8 +12,6 @@ local InCombatLockdown, UnitDebuff, UnitBuff, UnitGroupRolesAssigned, UnitIsConn
 -- [buffs] [debuffs] [raid cooldowns] [my casts] [personals]
 -- [name] [status] [raid target] [readycheck]
 
-
-
 local specialspells = {}
 specialspells['Sentence of Sargeras'] = true
 specialspells['Soulblight'] = true
@@ -25,9 +23,10 @@ specialspells['Chilled Blood'] = true
 local config = bdConfigLib:GetSave("Grid")
 local core_config = bdConfigLib:GetSave("bdAddons")
 
-local auras_config = bdConfigLib:GetSave('Auras')
+local aura_config = bdConfigLib:GetSave('Auras')
+-- print(aura_config)
 if (not aura_config) then
-	auras_config = bdConfigLib:RegisterModule({
+	aura_config = bdConfigLib:RegisterModule({
 		name = "Auras"
 	}, bdCore.auraconfig, "BD_persistent")
 end
