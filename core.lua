@@ -126,7 +126,7 @@ local function dispelAndGlow(self, event, unit)
 					noMoreDebuffs = true
 				end
 
-				if (config.specialalerts[debuff]) then
+				if (config.specialalerts[debuff] or bdCore:isGlow(debuff)) then
 					foundGlow = true
 					noMoreBuffs = true
 					noMoreDebuffs = true
@@ -141,7 +141,7 @@ local function dispelAndGlow(self, event, unit)
 				noMoreBuffs = true
 			end
 
-			if (config.specialalerts[buff]) then
+			if (config.specialalerts[buff] or bdCore:isGlow(buff)) then
 				foundGlow = true
 				noMoreBuffs = true
 			end
