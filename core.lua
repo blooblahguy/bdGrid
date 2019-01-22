@@ -224,7 +224,7 @@ function grid.layout(self, unit)
 	self.Status = self.Health:CreateFontString(nil)
 	self.Status:SetFont(bdCore.media.font, 12, "OUTLINE")
 	self.Status:SetPoint('BOTTOMLEFT', self, "BOTTOMLEFT", 0, 0)
-	oUF.Tags.Events["status"] = "UNIT_HEALTH  UNIT_CONNECTION"
+	oUF.Tags.Events["status"] = "UNIT_HEALTH UNIT_CONNECTION"
 	oUF.Tags.Methods["status"] = function(unit)
 		if not UnitIsConnected(unit) then
 			return "offline"		
@@ -251,12 +251,21 @@ function grid.layout(self, unit)
 	self.HealPredict:SetAllPoints(self.Health)
 	self.HealPredict:SetStatusBarTexture(bdCore.media.flat)
 	self.HealPredict:SetStatusBarColor(0.6,1,0.6,.2)
-	
 
 	-- Resurrect
 	self.ResurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	self.ResurrectIndicator:SetSize(16, 16)
     self.ResurrectIndicator:SetPoint('TOPRIGHT', self)
+
+	-- Summon
+	self.SummonIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
+	self.SummonIndicator:SetSize(16, 16)
+    self.SummonIndicator:SetPoint('TOPRIGHT', self)
+
+	-- Phase
+	self.PhaseIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
+	self.PhaseIndicator:SetSize(16, 16)
+    self.PhaseIndicator:SetPoint('TOPRIGHT', self)
 
 	-- Power
 	self.Power = CreateFrame("StatusBar", nil, self.Health)
