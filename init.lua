@@ -239,14 +239,14 @@ defaults[#defaults+1] = {text = {
 	value = "You can add or remove a nickname to a player by right clicking their name and clicking 'Add player alias'",
 }}
 
--- if another bdAddon hasn't added auras to config, add them here
--- if (not bdCore.modules["Auras"]) then
--- 	bdCore:addModule("Auras", bdCore.auraconfig, true)
--- end
+-- aura conditional loading
+local aura_config = bdConfigLib:GetSave('Auras')
+if (not aura_config) then
+	aura_config = bdConfigLib:RegisterModule({
+		name = "Auras"
+	}, bdCore.auraconfig, "BD_persistent")
+end
 
--- print("config", BD_persistent)
-
-bdConfigLib:RegisterModule({
+local config = bdConfigLib:RegisterModule({
 	name = "Grid"
 }, defaults, "BD_persistent")
--- bdCore:addModule("Grid", defaults)
