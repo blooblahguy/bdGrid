@@ -391,13 +391,13 @@ function grid.layout(self, unit)
 	self.Buffs['growth-y'] = "DOWN"
 	self.Buffs['growth-x'] = "RIGHT"
 
-	self.Buffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
+	self.Buffs.CustomFilter = function(self, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll,timeMod, effect1, effect2, effect3)
 		isBossDebuff = isBossDebuff or false
 		nameplateShowAll = nameplateShowAll or false
 		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
 		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
-	self.Buffs.PostCreateIcon = function(buffs, unit, button) 
+	self.Buffs.PostCreateIcon = function(self, button) 
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		region:SetAlpha(1)
