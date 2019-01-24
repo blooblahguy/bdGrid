@@ -5,6 +5,12 @@ local grid = bdCore.Grid
 -- Configuration Main
 --------------------------------------
 local defaults = {}
+local specialspells = {}
+specialspells['Sentence of Sargeras'] = true
+specialspells['Soulblight'] = true
+specialspells['Soulbomb'] = true
+specialspells['Fulminating Pulse'] = true
+specialspells['Chilled Blood'] = true
 
 ---------------------------------
 -- Frames Display
@@ -243,7 +249,8 @@ defaults[#defaults+1] = {text = {
 local aura_config = bdConfigLib:GetSave('Auras')
 if (not aura_config) then
 	aura_config = bdConfigLib:RegisterModule({
-		name = "Auras"
+		name = "Auras",
+		persistent = true
 	}, bdCore.auraconfig, "BD_persistent")
 end
 

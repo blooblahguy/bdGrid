@@ -12,26 +12,8 @@ local InCombatLockdown, UnitDebuff, UnitBuff, UnitGroupRolesAssigned, UnitIsConn
 -- [buffs] [debuffs] [raid cooldowns] [my casts] [personals]
 -- [name] [status] [raid target] [readycheck]
 
-local specialspells = {}
-specialspells['Sentence of Sargeras'] = true
-specialspells['Soulblight'] = true
-specialspells['Soulbomb'] = true
-specialspells['Fulminating Pulse'] = true
-specialspells['Chilled Blood'] = true
-
-
 local config = bdConfigLib:GetSave("Grid")
 local core_config = bdConfigLib:GetSave("bdAddons")
-
-local aura_config = bdConfigLib:GetSave('Auras')
--- print(aura_config)
-if (not aura_config) then
-	aura_config = bdConfigLib:RegisterModule({
-		name = "Auras"
-	}, bdCore.auraconfig, "BD_persistent")
-end
-
-
 if (not core_config.GridAliases) then
 	core_config.GridAliases = {}
 end
@@ -169,7 +151,7 @@ end
 
 -- Load 
 local index = 1;
-function grid.layout(self, unit)
+function grid:layout(unit)
 	self:RegisterForClicks('AnyDown')
 	self.unit = unit
 	
@@ -179,7 +161,7 @@ function grid.layout(self, unit)
 		self.unit = unit
 	end
 	
-	function self.configUpdate(self)
+	function self:configUpdate()
 		local role = UnitGroupRolesAssigned(self.unit)
 		self.Power:Hide()
 		if (config.powerdisplay == "None") then
@@ -203,7 +185,7 @@ function grid.layout(self, unit)
 	self.Health.colorReaction = true
 	self.Health.colorHealth = true
 	bdCore:setBackdrop(self.Health)
-	self.Health.PostUpdate = function(s, unit, min, max)
+	function self.Health:PostUpdate(unit, min, max)
 		local r, g, b = self.Health:GetStatusBarColor()
 		
 		if (config.invert) then
@@ -334,12 +316,6 @@ function grid.layout(self, unit)
 			UnitFrame_OnEnter(self)
 		end
 	end)
-	self:SetScript("OnLeave", function()
-		--self.freebarrow:Hide()
-		--self.arrowmouseover = false
-		UnitFrame_OnLeave(self)
-	end)
-
 	
 	-- Raid Icon
 	self.RaidTargetIndicator = self.Health:CreateTexture(nil, "OVERLAY", nil, 1)
@@ -407,6 +383,7 @@ function grid.layout(self, unit)
 	self.Buffs:SetFrameLevel(21)
 	
 	self.Buffs:EnableMouse(false)
+	self.Buffs.disableMouse = true
 	self.Buffs.initialAnchor  = "TOPLEFT"
 	self.Buffs.size = config.buffSize
 	self.Buffs.spacing = 1
@@ -423,9 +400,8 @@ function grid.layout(self, unit)
 	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
-		button:EnableMouse(false)
 		region:SetAlpha(1)
-		region:Show(1)
+		region:Show()
 		if (config.showBuffTimers) then
 			region:SetTextHeight(config.buffSize)
 			region:SetJustifyH("CENTER")
@@ -466,12 +442,14 @@ function grid.layout(self, unit)
 	
 	self.Debuffs.initialAnchor = "CENTER"
 	self.Debuffs.size = config.debuffSize
+	self.Debuffs:EnableMouse(false)
+	self.Debuffs.disableMouse = true
 	self.Debuffs.spacing = 1
 	self.Debuffs.num = 4
 	self.Debuffs['growth-y'] = "DOWN"
 	self.Debuffs['growth-x'] = "RIGHT"
 
-	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3)
+	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod)
 		isBossDebuff = isBossDebuff or false
 		nameplateShowAll = nameplateShowAll or false
 		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
@@ -481,7 +459,7 @@ function grid.layout(self, unit)
 	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
-		button:EnableMouse(false)
+		
 		if (config.showDebuffTimers) then
 			region:SetAlpha(1)
 			region:SetTextHeight(config.debuffSize)
@@ -510,7 +488,6 @@ end
 
 local raidpartyholder = CreateFrame('frame', "bdGrid", UIParent)
 raidpartyholder:SetSize(config['width']+2, config['height']*5+8)
-raidpartyholder:EnableMouse()
 raidpartyholder:SetPoint("TOPLEFT", UIParent, "CENTER", -250,200)
 bdCore:makeMovable(raidpartyholder)
 
@@ -808,20 +785,9 @@ end);
 -- disable blizzard raid frames
 local addonDisabler = CreateFrame("frame", nil)
 addonDisabler:RegisterEvent("ADDON_LOADED")
+addonDisabler:RegisterEvent("PLAYER_REGEN_ENABLED")
 addonDisabler:SetScript("OnEvent", function(self, event, addon)
-	-- print(addon)
-	-- if (IsAddOnLoaded("BlizzardRaidUI")) then
-	-- 	DisableAddOn("BlizzardRaidUI")
-	-- end
-	-- if (IsAddOnLoaded("Blizzard_DeathRecap")) then
-	-- 	DisableAddOn("Blizzard_DeathRecap")
-	-- end
-	-- if (IsAddOnLoaded("Blizzard_CompactUnitFrameProfiles")) then
-	-- 	DisableAddOn("Blizzard_CompactUnitFrameProfiles")
-	-- end
-	-- if (IsAddOnLoaded("Blizzard_CUFProfiles")) then
-	-- 	DisableAddOn("Blizzard_CUFProfiles")
-	-- end
+	if (InCombatLockdown()) then return end
 	if (IsAddOnLoaded("Blizzard_CompactRaidFrames")) then
 		CompactRaidFrameManager:UnregisterAllEvents() 
 		CompactRaidFrameManager:Hide() 
@@ -829,6 +795,8 @@ addonDisabler:SetScript("OnEvent", function(self, event, addon)
 		CompactRaidFrameContainer:UnregisterAllEvents() 
 		CompactRaidFrameContainer:Hide()
 		CompactRaidFrameContainer.Show = bdCore.noop
-		-- DisableAddOn("Blizzard_CompactRaidFrames")
+
+		addonDisabler:UnregisterEvent("ADDON_LOADED")
+		addonDisabler:UnregisterEvent("PLAYER_REGEN_ENABLED")
 	end
 end)
