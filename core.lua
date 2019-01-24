@@ -151,7 +151,7 @@ end
 
 -- Load 
 local index = 1;
-function grid:layout(unit)
+function grid.layout(self, unit)
 	self:RegisterForClicks('AnyDown')
 	self.unit = unit
 	
@@ -185,7 +185,7 @@ function grid:layout(unit)
 	self.Health.colorReaction = true
 	self.Health.colorHealth = true
 	bdCore:setBackdrop(self.Health)
-	function self.Health:PostUpdate(unit, min, max)
+	function self.Health.PostUpdate(s, unit, min, max)
 		local r, g, b = self.Health:GetStatusBarColor()
 		
 		if (config.invert) then
