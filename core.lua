@@ -27,7 +27,7 @@ function grid:frameSize(frame)
 	frame.RaidTargetIndicator:SetSize(12, 12)
 	frame.ReadyCheckIndicator:SetSize(12, 12)
 	frame.ResurrectIndicator:SetSize(16, 16)
-	frame.ThreatIndicator:SetSize(60, 50)
+	frame.SimpleThreat:SetSize(60, 50)
 	frame.Dispel:SetSize(60, 50)
 	
 	frame.Short:SetWidth(config.width)
@@ -368,14 +368,22 @@ function grid.layout(self, unit)
 	self.ResurrectIndicator:SetPoint('CENTER', self, "CENTER", 0,0)
 	
 	-- Threat
-	self.ThreatIndicator = CreateFrame('frame', nil, self)
-	self.ThreatIndicator:SetFrameLevel(95)
-	self.ThreatIndicator:SetPoint('TOPRIGHT', self, "TOPRIGHT", 1, 1)
-	self.ThreatIndicator:SetPoint('BOTTOMLEFT', self, "BOTTOMLEFT", -1, -1)
-	self.ThreatIndicator:SetBackdrop({bgFile = bdCore.media.flat, edgeFile = bdCore.media.flat, edgeSize = 1})
-	self.ThreatIndicator:SetBackdropBorderColor(1, 0, 0,1)
-	self.ThreatIndicator:SetBackdropColor(0,0,0,0)
-	self.ThreatIndicator.SetVertexColor = function() return end
+	self.SimpleThreat = CreateFrame('frame', nil, self)
+	self.SimpleThreat:SetFrameLevel(95)
+	self.SimpleThreat:SetPoint('TOPRIGHT', self, "TOPRIGHT", 1, 1)
+	self.SimpleThreat:SetPoint('BOTTOMLEFT', self, "BOTTOMLEFT", -1, -1)
+	self.SimpleThreat:SetBackdrop({bgFile = bdCore.media.flat, edgeFile = bdCore.media.flat, edgeSize = 1})
+	self.SimpleThreat:SetBackdropBorderColor(1, 0, 0,1)
+	self.SimpleThreat:SetBackdropColor(0,0,0,0)
+	self.SimpleThreat.Callback = function(self)
+		local status = UnitThreatSituation("player")
+		if (status >= 2) then
+			self:Show()
+		else
+			self:Hide()
+		end
+	end
+	self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", self.SimpleThreat.Callback)
 	
 	-- Buffs
 	self.Buffs = CreateFrame("Frame", nil, self.Health)
