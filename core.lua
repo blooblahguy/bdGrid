@@ -397,7 +397,7 @@ function grid.layout(self, unit)
 		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
 		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
-	self.Buffs.PostUpdateIcon = function(buffs, unit, button) 
+	self.Buffs.PostCreateIcon = function(buffs, unit, button) 
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		region:SetAlpha(1)
@@ -456,7 +456,7 @@ function grid.layout(self, unit)
 		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
 
-	self.Debuffs.PostUpdateIcon = function(buffs, unit, button)
+	self.Debuffs.PostCreateIcon = function(buffs, unit, button)
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		
