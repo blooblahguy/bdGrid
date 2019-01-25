@@ -375,14 +375,21 @@ function grid.layout(self, unit)
 	self.SimpleThreat:SetBackdrop({bgFile = bdCore.media.flat, edgeFile = bdCore.media.flat, edgeSize = 1})
 	self.SimpleThreat:SetBackdropBorderColor(1, 0, 0,1)
 	self.SimpleThreat:SetBackdropColor(0,0,0,0)
+	self.SimpleThreat:Hide()
 	self.SimpleThreat.Callback = function(self)
 		local status = UnitThreatSituation("player")
-		if (status >= 2) then
-			self:Show()
+		if (status and status >= 2) then
+			self.SimpleThreat:Show()
 		else
-			self:Hide()
+			self.SimpleThreat:Hide()
 		end
 	end
+	self:RegisterEvent("UNIT_HEALTH", self.SimpleThreat.Callback)
+	self:RegisterEvent("PLAYER_ALIVE", self.SimpleThreat.Callback, true)
+	self:RegisterEvent("PLAYER_UNGHOST", self.SimpleThreat.Callback, true)
+	self:RegisterEvent("PLAYER_TARGET_CHANGED", self.SimpleThreat.Callback, true)
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", self.SimpleThreat.Callback, true)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", self.SimpleThreat.Callback, true)
 	self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", self.SimpleThreat.Callback)
 	
 	-- Buffs
@@ -457,14 +464,14 @@ function grid.layout(self, unit)
 	self.Debuffs['growth-y'] = "DOWN"
 	self.Debuffs['growth-x'] = "RIGHT"
 
-	self.Debuffs.CustomFilter = function(element, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod)
+	self.Debuffs.CustomFilter = function(self, unit, button, name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID, canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod)
 		isBossDebuff = isBossDebuff or false
 		nameplateShowAll = nameplateShowAll or false
 		local castByPlayer = caster and UnitIsUnit(caster, "player") or false
 		return bdCore:filterAura(name, castByPlayer, isBossDebuff, nameplateShowAll, false)
 	end
 
-	self.Debuffs.PostCreateIcon = function(buffs, unit, button)
+	self.Debuffs.PostCreateIcon = function(self, button)
 		local region = button.cd:GetRegions()
 		button:SetAlpha(0.8)
 		
