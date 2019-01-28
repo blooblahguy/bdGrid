@@ -247,7 +247,7 @@ function grid.layout(self, unit)
 	-- Phase
 	self.PhaseIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	self.PhaseIndicator:SetSize(16, 16)
-    self.PhaseIndicator:SetPoint('TOPRIGHT', self)
+    self.PhaseIndicator:SetPoint('BOTTOMLEFT', self)
 
 	-- Power
 	self.Power = CreateFrame("StatusBar", nil, self.Health)
