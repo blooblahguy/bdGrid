@@ -171,6 +171,15 @@ function grid.layout(self, unit)
 		elseif (config.powerdisplay == "All") then
 			self.Power:Show()
 		end
+
+
+		if (config.hideabsorbs) then
+			self.TotalAbsorb:Hide()
+			self.HealAbsorb:Hide()
+		else
+			self.TotalAbsorb:Show()
+			self.HealAbsorb:Show()
+		end
 	end
 	
 	-- Health
@@ -228,6 +237,10 @@ function grid.layout(self, unit)
 	self.HealAbsorb:SetAllPoints(self.Health)
 	self.HealAbsorb:SetStatusBarTexture(bdCore.media.flat)
 	self.HealAbsorb:SetStatusBarColor(.2,0,0,.5)
+	if (config.hideabsorbs) then
+		self.HealAbsorb:Hide()
+		self.TotalAbsorb:Hide()
+	end
 	
 	self.HealPredict = CreateFrame('StatusBar', nil, self.Health)
 	self.HealPredict:SetAllPoints(self.Health)
@@ -402,7 +415,7 @@ function grid.layout(self, unit)
 	self.Buffs.initialAnchor  = "TOPLEFT"
 	self.Buffs.size = config.buffSize
 	self.Buffs.spacing = 1
-	self.Buffs.num = 4
+	self.Buffs.num = 6
 	self.Buffs['growth-y'] = "DOWN"
 	self.Buffs['growth-x'] = "RIGHT"
 

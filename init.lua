@@ -57,6 +57,13 @@ defaults[#defaults+1] = {height = {
 	tooltip = "The height of each player in the raid frames",
 	callback = function() bdCore.Grid:callback() end
 }}
+defaults[#defaults+1] = {hideabsorbs = {
+	type = "checkbox",
+	value = true,
+	label = "Hide Absorbs",
+	tooltip = "Not recommended, hide absorbs for units",
+	callback = function() bdCore.Grid:refresh() end
+}}
 defaults[#defaults+1] = {hidetooltips = {
 	type = "checkbox",
 	value = true,
