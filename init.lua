@@ -59,7 +59,7 @@ defaults[#defaults+1] = {height = {
 }}
 defaults[#defaults+1] = {hideabsorbs = {
 	type = "checkbox",
-	value = true,
+	value = false,
 	label = "Hide Absorbs",
 	tooltip = "Not recommended, hide absorbs for units",
 	callback = function() bdCore.Grid:refresh() end
