@@ -103,7 +103,7 @@ local function dispelAndGlow(self, event, unit)
 			if (not debuff) then
 				noMoreDebuffs = true
 			else
-				if (dispelColors[debuffType]) then
+				if (dispelColors[debuffType] and not bdCore:isBlacklisted(debuff)) then
 					foundDispel = debuffType
 					noMoreDebuffs = true
 				end
